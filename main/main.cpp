@@ -1,20 +1,26 @@
+#include <stdio.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "esp_log.h"
+#include "esp_timer.h"
 
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-  Serial.println("Uptime Counter Started...");
-}
+// Define a logging tag for your serial monitor output
+static const char *TAG = "FIRMWARE_CHECK";
 
-void loop() {
-  // millis() reads the total milliseconds since the ESP32 booted up
-  unsigned long runTime = millis() / 1000; 
+extern "C" void app_main(void)
+{
+    ESP_LOGI(TAG, "Uptime Counter Started...");
 
-  Serial.print("Firmware Status: RUNNING | System Uptime: ");
-  Serial.print(runTime);
-  Serial.println(" seconds");
+    while (1) {
+        // esp_timer_get_time() returns microseconds since boot up
+        // Divide by 1000000 to convert to seconds
+        uint64_t runTime = esp_timer_get_time() / 1000000;
 
-  vTaskDelay(pdMS_TO_TICKS(1000)); // Wait 1 second before printing again
+        // Print to the serial log
+        ESP_LOGI(TAG, "Status: RUNNING | System Uptime: %llu seconds", runTime);
+
+        // Native FreeRTOS delay (1000 milliseconds)
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }
 
