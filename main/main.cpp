@@ -1,3 +1,6 @@
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
 void setup() {
   Serial.begin(115200);
   delay(1000);
@@ -12,6 +15,6 @@ void loop() {
   Serial.print(runTime);
   Serial.println(" seconds");
 
-  delay(1000); // Wait 1 second before printing again
+  vTaskDelay(pdMS_TO_TICKS(1000)); // Wait 1 second before printing again
 }
 
