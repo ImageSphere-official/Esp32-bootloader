@@ -14,7 +14,8 @@ jobs:
         with:
           esp_idf_version: v5.5
           target: esp32
-          # Explicitly run the build command
+          # If your CMakeLists.txt is in the root, remove the 'cd' part.
+          # If it is inside a folder, keep the 'cd' command below.
           command: idf.py build
 
       - name: Upload Binaries
@@ -22,8 +23,8 @@ jobs:
         with:
           name: firmware
           path: |
-            build/bootloader/bootloader.bin
-            build/partition_table/partition-table.bin
-            build/*.bin
+            Esp32-bootloader/build/bootloader/bootloader.bin
+            Esp32-bootloader/build/partition_table/partition-table.bin
+            Esp32-bootloader/build/*.bin
           if-no-files-found: error
 
